@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f7f3"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Organize">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Organize</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loginGate" class="login-gate">
+  <form id="loginForm" class="login-card">
+    <div class="eyebrow">TU ESPACIO PERSONAL</div>
+    <h1>Organize<span>.</span></h1>
+    <p class="muted">Escribe tu código de acceso para abrir tu espacio.</p>
+    <label class="field">Código de acceso<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+    <p id="loginError" class="login-error" role="alert"></p>
+    <button class="primary full" id="loginSubmit" type="submit">Entrar</button>
+  </form>
+</div>
+<header class="topbar"><div><div class="eyebrow" id="todayLabel">TU ESPACIO PERSONAL</div><h1>Organize<span>.</span></h1></div><button class="avatar" id="settingsShortcut" aria-label="Configuración">✦</button></header>
+<div id="syncStatus" class="sync-status" aria-live="polite"></div>
+<main>
+<section id="home" class="page active">
+  <div class="hello"><div><p class="muted" id="greeting">Hola, hoy es un buen día</p><h2 id="dateHeading">Tu día, a tu ritmo.</h2></div><div class="date-chip" id="dateChip"></div></div>
+  <div class="card hero-card"><div class="hero-top"><span>PROGRESO DE HOY</span><span id="progressText">0%</span></div><div class="progress"><i id="progressBar"></i></div><p id="progressCaption">Cada pequeño paso cuenta.</p></div>
+  <div class="section-head"><h3>Para hoy</h3><button class="text-button" data-go="tasks">Ver todo</button></div>
+  <div id="todayTasks" class="stack"></div>
+  <div class="section-head"><h3>Tu resumen</h3><button class="text-button" data-go="health">Ver salud</button></div>
+  <div class="stats-grid">
+    <div class="card mini-stat"><span>🍽️</span><strong id="homeCalories">0 kcal</strong><small>Consumidas</small></div>
+    <div class="card mini-stat"><span>💧</span><strong id="homeWater">0 / 8</strong><small>Vasos de agua</small></div>
+    <div class="card mini-stat"><span>👟</span><strong id="homeSteps">0</strong><small>Pasos</small></div>
+    <div class="card mini-stat"><span>🔥</span><strong id="homeExercise">0 kcal</strong><small>Ejercicio</small></div>
+  </div>
+  <div class="section-head"><h3>Próximas entregas</h3><button class="text-button" data-go="study">Asignaturas</button></div><div id="upcoming" class="stack"></div>
+</section>
+
+<section id="tasks" class="page">
+  <div class="page-heading"><p class="eyebrow">TU ORGANIZACIÓN</p><h2>Tareas</h2><p class="muted">Todo en orden, sin agobios.</p></div>
+  <div class="segmented" id="taskTabs"><button class="selected" data-filter="pending">Pendientes</button><button data-filter="done">Completadas</button></div>
+  <div class="pills" id="taskCategories"><button class="selected" data-cat="all">Todas</button><button data-cat="home">Hogar</button><button data-cat="self">Cuidado</button></div>
+  <div id="taskList" class="stack"></div>
+  <button class="fab" id="addGeneralTask">＋ <span>Nueva tarea</span></button>
+</section>
+
+<section id="study" class="page">
+  <div class="page-heading"><p class="eyebrow">FORMACIÓN</p><h2>Mis asignaturas</h2><p class="muted">Tus trabajos y entregas, en un mismo sitio.</p></div>
+  <div id="subjects" class="subject-grid"></div>
+  <div id="gradesPanel" class="grades-panel"></div>
+  <div class="section-head"><h3>Trabajos pendientes</h3><button class="text-button" id="addStudyTask">＋ Añadir</button></div>
+  <div id="studyList" class="stack"></div>
+</section>
+
+<section id="calendar" class="page">
+  <div class="page-heading"><p class="eyebrow">PLANIFICACIÓN</p><h2>Calendario</h2><p class="muted">Noviembre 2026 — Junio 2027</p></div>
+  <div class="card calendar-card"><div class="calendar-controls"><button id="prevMonth">‹</button><h3 id="monthTitle"></h3><button id="nextMonth">›</button></div><div class="calendar-grid weekdays"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="calendar-grid" id="calendarGrid"></div></div>
+  <div class="section-head"><h3 id="selectedDateTitle">Anotaciones</h3><button class="text-button" id="addNote">＋ Añadir nota</button></div><div id="dayDetails" class="stack"></div>
+</section>
+
+<section id="health" class="page">
+  <div class="page-heading"><p class="eyebrow">BIENESTAR</p><h2>Cuídate</h2><p class="muted">Hábitos sostenibles, a tu manera.</p></div>
+  <div class="section-head"><h3>Alimentación</h3><button class="text-button" id="addFood">＋ Añadir alimento</button></div>
+  <div class="card nutrition-card"><div><span class="muted">Calorías consumidas hoy</span><div class="big-number"><b id="calorieTotal">0</b><small>kcal</small></div><div class="muted" id="calorieGoalLabel">Objetivo diario por configurar</div></div><div class="calorie-ring" id="calorieRing"><span id="caloriePercent">0%</span></div></div>
+  <div class="meal-list" id="mealList"></div>
+  <div class="section-head"><h3>Agua</h3><span class="muted" id="waterCount">0 / 8 vasos</span></div>
+  <div class="card water-card"><div id="waterGlasses" class="glasses"></div><div class="inline-controls"><button class="secondary" id="removeWater">− Vaso</button><button class="primary" id="addWater">＋ Vaso</button></div><small class="muted">Configura los ml por vaso en Personalización.</small></div>
+  <div class="section-head"><h3>Ejercicio de hoy</h3><button class="text-button" id="addExercise">＋ Registrar</button></div><div id="exerciseList" class="stack"></div>
+  <div class="section-head"><h3>Pasos</h3></div><div class="card steps-card"><div><span class="muted">Pasos de hoy</span><div class="big-number"><b id="stepsNumber">0</b><small>pasos</small></div></div><button class="secondary" id="editSteps">Editar</button></div>
+  <div class="section-head"><h3>Mi objetivo</h3><button class="text-button" id="editProfile">Editar datos</button></div><div class="card profile-card" id="profileSummary"><p class="muted">Añade tus datos para calcular una estimación de tus necesidades energéticas.</p></div>
+  <div class="section-head"><h3>Resumen de actividad</h3></div><div class="stats-grid"><div class="card mini-stat"><strong id="exerciseMinutes">0 min</strong><small>Ejercicio</small></div><div class="card mini-stat"><strong id="exerciseBurned">0 kcal</strong><small>Calorías activas registradas</small></div></div>
+</section>
+
+<section id="settings" class="page">
+  <div class="page-heading"><p class="eyebrow">A TU MANERA</p><h2>Personalización</h2><p class="muted">Ajusta Organize a tus preferencias.</p></div>
+  <div class="card settings-card"><h3>Apariencia</h3><label>Color de acento<select id="accent"><option value="sage">Verde salvia</option><option value="blue">Azul suave</option><option value="rose">Rosa empolvado</option></select></label><label>Modo<select id="theme"><option value="light">Claro</option><option value="dark">Oscuro</option></select></label><label>Nombre en la bienvenida<input id="userName" placeholder="Tu nombre"></label></div>
+  <div class="card settings-card"><h3>Objetivos diarios</h3><label>Objetivo de vasos de agua<input id="waterGoal" type="number" min="1" max="30"></label><label>Mililitros por vaso<input id="glassMl" type="number" min="50" max="1000" step="25"></label><label>Objetivo de pasos<input id="stepGoal" type="number" min="500" step="500"></label></div>
+  <div class="card settings-card"><h3>Datos y privacidad</h3><p class="muted">Tus registros se guardan en tu cuenta privada en la nube y se sincronizan entre tus dispositivos. Al buscar calorías, el nombre del alimento se consulta en Open Food Facts.</p><button class="secondary full" id="exportData">Exportar mis datos</button><button class="secondary full" id="logoutBtn">Cerrar sesión</button><button class="danger full" id="resetData">Borrar todos los datos</button></div>
+  <div class="footnote">Organize · Tu espacio personal</div>
+</section>
+</main>
+<nav class="tabbar">
+<button class="tab active" data-page="home"><span>⌂</span><small>Inicio</small></button><button class="tab" data-page="tasks"><span>✓</span><small>Tareas</small></button><button class="tab" data-page="study"><span>▤</span><small>Clase</small></button><button class="tab" data-page="calendar"><span>▦</span><small>Calendario</small></button><button class="tab" data-page="health"><span>♡</span><small>Salud</small></button>
+</nav>
+<div id="undoBar" class="undo-bar" aria-live="polite"></div>
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Añadir</h3><button id="closeModal">×</button></div><form id="modalForm"><div id="modalFields"></div><button class="primary full" type="submit">Guardar</button></form></div></div>
+<script type="module" src="app.js"></script>
+</body></html>
