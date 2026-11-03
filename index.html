@@ -8,16 +8,6 @@
 <title>Organize</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="loginGate" class="login-gate">
-  <form id="loginForm" class="login-card">
-    <div class="eyebrow">TU ESPACIO PERSONAL</div>
-    <h1>Organize<span>.</span></h1>
-    <p class="muted">Escribe tu código de acceso para abrir tu espacio.</p>
-    <label class="field">Código de acceso<input id="loginPassword" type="password" autocomplete="current-password" required></label>
-    <p id="loginError" class="login-error" role="alert"></p>
-    <button class="primary full" id="loginSubmit" type="submit">Entrar</button>
-  </form>
-</div>
 <header class="topbar"><div><div class="eyebrow" id="todayLabel">TU ESPACIO PERSONAL</div><h1>Organize<span>.</span></h1></div><button class="avatar" id="settingsShortcut" aria-label="Configuración">✦</button></header>
 <div id="syncStatus" class="sync-status" aria-live="polite"></div>
 <main>
@@ -75,7 +65,7 @@
   <div class="page-heading"><p class="eyebrow">A TU MANERA</p><h2>Personalización</h2><p class="muted">Ajusta Organize a tus preferencias.</p></div>
   <div class="card settings-card"><h3>Apariencia</h3><label>Color de acento<select id="accent"><option value="sage">Verde salvia</option><option value="blue">Azul suave</option><option value="rose">Rosa empolvado</option></select></label><label>Modo<select id="theme"><option value="light">Claro</option><option value="dark">Oscuro</option></select></label><label>Nombre en la bienvenida<input id="userName" placeholder="Tu nombre"></label></div>
   <div class="card settings-card"><h3>Objetivos diarios</h3><label>Objetivo de vasos de agua<input id="waterGoal" type="number" min="1" max="30"></label><label>Mililitros por vaso<input id="glassMl" type="number" min="50" max="1000" step="25"></label><label>Objetivo de pasos<input id="stepGoal" type="number" min="500" step="500"></label></div>
-  <div class="card settings-card"><h3>Datos y privacidad</h3><p class="muted">Tus registros se guardan en tu cuenta privada en la nube y se sincronizan entre tus dispositivos. Al buscar calorías, el nombre del alimento se consulta en Open Food Facts.</p><button class="secondary full" id="exportData">Exportar mis datos</button><button class="secondary full" id="logoutBtn">Cerrar sesión</button><button class="danger full" id="resetData">Borrar todos los datos</button></div>
+  <div class="card settings-card"><h3>Datos y privacidad</h3><p class="muted">Tus registros se guardan en la nube y se sincronizan entre tus dispositivos. Al buscar calorías, el nombre del alimento se consulta en Open Food Facts.</p><button class="secondary full" id="exportData">Exportar mis datos</button><button class="danger full" id="resetData">Borrar todos los datos</button></div>
   <div class="footnote">Organize · Tu espacio personal</div>
 </section>
 </main>

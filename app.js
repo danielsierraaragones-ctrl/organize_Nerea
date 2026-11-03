@@ -1,5 +1,5 @@
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getAuth,signInAnonymously,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {getFirestore,doc,setDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const subjects=["Estética Hidrotermal","Proyecto Intermodular","Drenaje Linfático","Tratamientos Estéticos","Depilación Avanzada","Sostenibilidad y Digitalización","Belleza en la Mirada"];
@@ -30,8 +30,6 @@ const firebaseConfig={
   messagingSenderId:"1050144016858",
   appId:"1:1050144016858:web:fb9969d000f807b8db98e3"
 };
-/* Correo de acceso: el mismo que creas en Firebase → Authentication → Usuarios */
-const ACCESS_EMAIL="acceso@micalendario.com";
 const CACHE_KEY="organizeData",DIRTY_KEY="organizeDirty";
 const DEFAULT_SETTINGS={waterGoal:8,glassMl:250,stepGoal:8000,accent:"sage",theme:"light",userName:""};
 const DOCS={principal:["tasks","study","notes","grades","profile","settings"],historial:["completed"],salud:["foods","exercises","water","steps"]};
@@ -183,22 +181,17 @@ function render(){applySettings();renderHome();renderTasks();renderStudy();rende
 let now=new Date();$("#todayLabel").textContent=now.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"}).toUpperCase();$("#dateChip").textContent=now.toLocaleDateString("es-ES",{day:"numeric",month:"short"});$("#dateHeading").textContent="Tu día, a tu ritmo.";$("#greeting").textContent=(data.settings.userName?`Hola, ${data.settings.userName}`:"Hola, hoy es un buen día");
 render();if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 
-const gate=document.getElementById("loginGate"),loginErr=document.getElementById("loginError");
-const showLogin=()=>{gate.classList.remove("hidden");document.getElementById("loginPassword").focus()},hideLogin=()=>gate.classList.add("hidden");
+/* Sin contraseña: la página entra sola con acceso anónimo de Firebase */
 if(!configured){
-  hideLogin();setSync("Modo local: falta pegar los datos de Firebase en app.js. Nada se guarda en la nube.",true);
+  setSync("Modo local: falta pegar los datos de Firebase en app.js. Nada se guarda en la nube.",true);
 }else{
-  document.getElementById("loginForm").addEventListener("submit",async e=>{
-    e.preventDefault();loginErr.textContent="";const b=document.getElementById("loginSubmit");b.disabled=true;
-    try{await signInWithEmailAndPassword(auth,ACCESS_EMAIL,document.getElementById("loginPassword").value);document.getElementById("loginPassword").value=""}
-    catch(err){loginErr.textContent=err&&err.code==="auth/network-request-failed"?"Sin conexión. Inténtalo de nuevo.":"Código incorrecto. Inténtalo de nuevo."}
-    b.disabled=false;
-  });
-  document.getElementById("logoutBtn").onclick=()=>signOut(auth);
   onAuthStateChanged(auth,user=>{
     unsubs.forEach(u=>u());unsubs=[];synced=false;inflight=0;failed=false;last={};got={};exists={};remote={};deferred={};
-    if(!user){showLogin();return}
-    hideLogin();setSync("Conectando…");
+    setSync("Conectando…");
+    if(!user){
+      signInAnonymously(auth).catch(err=>{const c=err&&err.code;setSync(c==="auth/operation-not-allowed"?"⚠ Falta activar el acceso anónimo en Firebase (Authentication → Método de acceso → Anónimo).":"⚠ No se puede conectar ("+(c||"error")+"). Revisa la conexión.",true)});
+      return;
+    }
     setTimeout(()=>{if(!synced&&auth.currentUser)setSync("⚠ No se puede conectar con la base de datos. Revisa la conexión.",true)},10000);
     Object.keys(DOCS).forEach(name=>unsubs.push(onSnapshot(refs[name],snap=>onDoc(name,snap),err=>setSync("⚠ No se puede leer la base de datos ("+((err&&err.code)||"error")+").",true))));
   });
